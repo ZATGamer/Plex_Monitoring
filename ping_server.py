@@ -1,6 +1,6 @@
 import os
 import ConfigParser
-import email_notification as email
+import email_notification
 
 config_file = 'stateful.ini'
 config = ConfigParser.RawConfigParser()
@@ -31,7 +31,7 @@ if response == 0:
         # Send success email
         subject = "Anthony-Server7 Responding - SUCCESS"
         body = "Anthony-Server7 has started responding to Ping requests."
-        email.send_notification(subject, body)
+        email_notification.send_notification(subject, body)
 
 
 else:
@@ -47,6 +47,6 @@ else:
             subject = "Anthony-Server7 NOT Responding - FAILURE"
             body = "Anthony-Server7 is not responding to ping requests.\n" \
                    "Please have a Look!"
-            email.send_notification(subject, body)
+            email_notification.send_notification(subject, body)
 
     write_config()
