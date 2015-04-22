@@ -3,7 +3,7 @@ from urllib2 import urlopen, URLError, HTTPError
 import json
 import socket
 import ConfigParser
-import email_notification as email
+import email_notification
 
 
 def call_sb(sb_api_key, sb_ip, sb_port, sb_api):
@@ -63,7 +63,7 @@ if __name__ == '__main__':
                 subject = 'SickBeard is up -- SUCCESS'
                 body = 'SickBeard has started responding to ping requests.\n' \
                        'All is good!'
-                email.send_notification(subject, body)
+                email_notification.send_notification(subject, body)
 
         else:
             failed += 1
@@ -74,7 +74,7 @@ if __name__ == '__main__':
                     subject = 'SickBeard is DOWN -- FAILURE'
                     body = 'SickBeard is not responding to API ping requests.\n' \
                            'Please have a look.'
-                    email.send_notification(subject, body)
+                    email_notification.send_notification(subject, body)
                     notified += 1
                     state.set('sb', 'notified', notified)
             write_file(state_file, state)
@@ -88,7 +88,7 @@ if __name__ == '__main__':
                 subject = 'SickBeard is DOWN -- FAILURE'
                 body = 'SickBeard is not responding to API ping requests.\n' \
                        'Please have a look.'
-                email.send_notification(subject, body)
+                email_notification.send_notification(subject, body)
                 notified += 1
                 state.set('sb', 'notified', notified)
         write_file(state_file, state)
