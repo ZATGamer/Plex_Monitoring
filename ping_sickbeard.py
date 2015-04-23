@@ -4,6 +4,7 @@ import json
 import socket
 import ConfigParser
 import email_notification
+import datetime
 
 
 def call_sb(sb_api_key, sb_ip, sb_port, sb_api):
@@ -22,6 +23,23 @@ def call_sb(sb_api_key, sb_ip, sb_port, sb_api):
 def write_file(cfile, stuff):
     with open(cfile, 'wb') as configfile:
         stuff.write(configfile)
+
+
+def failure(failed, notified):
+    failed += 1
+    state.set('sb', 'failed', failed)
+    print '{} FAILED Count: {}'.format(datetime.datetime.now(), failed)
+    if failed >= 5:
+        print 'Sickbeard is DOWN'
+        if notified == 0:
+            subject = 'SickBeard is DOWN -- FAILURE'
+            body = 'SickBeard is not responding to API ping requests.\n' \
+                   'Please have a look.'
+            email_notification.send_notification(subject, body)
+            notified += 1
+            state.set('sb', 'notified', notified)
+    write_file(state_file, state)
+    return failed, notified
 
 
 if __name__ == '__main__':
@@ -51,7 +69,7 @@ if __name__ == '__main__':
         test = response2['result']
 
         if test == 'success':
-            print 'Sickbeard is up'
+            #print 'Sickbeard is up'
             if failed != 0:
                 failed = 0
                 state.set('sb', 'failed', failed)
@@ -66,29 +84,7 @@ if __name__ == '__main__':
                 email_notification.send_notification(subject, body)
 
         else:
-            failed += 1
-            state.set('sb', 'failed', failed)
-            if failed >= 5:
-                print 'Sickbeard is DOWN'
-                if notified == 0:
-                    subject = 'SickBeard is DOWN -- FAILURE'
-                    body = 'SickBeard is not responding to API ping requests.\n' \
-                           'Please have a look.'
-                    email_notification.send_notification(subject, body)
-                    notified += 1
-                    state.set('sb', 'notified', notified)
-            write_file(state_file, state)
+            failed, notified = failure(failed, notified)
 
     else:
-        failed += 1
-        state.set('sb', 'failed', failed)
-        if failed >= 5:
-            print 'Sickbeard is DOWN'
-            if notified == 0:
-                subject = 'SickBeard is DOWN -- FAILURE'
-                body = 'SickBeard is not responding to API ping requests.\n' \
-                       'Please have a look.'
-                email_notification.send_notification(subject, body)
-                notified += 1
-                state.set('sb', 'notified', notified)
-        write_file(state_file, state)
+        failed, notified = failure(failed, notified)
