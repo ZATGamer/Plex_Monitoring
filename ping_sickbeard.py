@@ -4,7 +4,6 @@ import json
 import socket
 import ConfigParser
 import email_notification
-import datetime
 
 
 def call_sb(sb_api_key, sb_ip, sb_port, sb_api):
@@ -70,7 +69,7 @@ if __name__ == '__main__':
         test = response2['result']
 
         if test == 'success':
-            #print 'Sickbeard is up'
+            print 'Sickbeard is up'
             if failed != 0:
                 failed = 0
                 state.set('sb', 'failed', failed)
