@@ -28,7 +28,7 @@ def write_file(cfile, stuff):
 def failure(failed, notified):
     failed += 1
     state.set('sb', 'failed', failed)
-    logging.warning('{} FAILED Count: {}'.format(datetime.datetime.now(), failed))
+    logging.warning('FAILED Count: {}'.format(failed))
     if failed >= 5:
         print 'Sickbeard is DOWN'
         if notified == 0:
@@ -43,7 +43,7 @@ def failure(failed, notified):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(filename='/var/log/ping_sickbeard.log', level=logging.DEBUG)
+    logging.basicConfig(filename='/var/log/ping_sickbeard.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
     state_file = 'stateful.ini'
     config_file = 'config.ini'
     # Read in the config.
