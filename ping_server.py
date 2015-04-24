@@ -4,18 +4,13 @@ import email_notification
 import logging
 
 
-def write_config():
-    with open(config_file, 'wb') as configfile:
-        config.write(configfile)
-
-
 def write_file(cfile, stuff):
     with open(cfile, 'wb') as configfile:
         stuff.write(configfile)
 
 
 if __name__ == '__main__':
-    #logging.basicConfig(filename='/var/log/ping_server.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
+    logging.basicConfig(filename='/var/log/ping_server.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
     state_file = 'stateful.ini'
     state = ConfigParser.RawConfigParser()
     state.read(state_file)
