@@ -15,7 +15,7 @@ if __name__ == '__main__':
     config = ConfigParser.RawConfigParser()
     config.read(config_file)
 
-    hostname = config.get['General', 'ip']
+    hostname = config.get('General', 'ip')
     response = os.system("ping -c 1 {}".format(hostname))
 
     failed = int(config.get('ping', 'failed'))
