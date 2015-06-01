@@ -74,6 +74,7 @@ if __name__ == '__main__':
                 failed = 0
                 state.set('sb', 'failed', failed)
                 write_file(state_file, state)
+                logging.warning('FAILED Count Reset to: {}'.format(failed))
             if notified != 0:
                 notified = 0
                 state.set('sb', 'notified', notified)
@@ -82,6 +83,7 @@ if __name__ == '__main__':
                 body = 'SickBeard has started responding to ping requests.\n' \
                        'All is good!'
                 email_notification.send_notification(subject, body)
+                logging.warning('NOTIFIED Count Reset to: {}'.format(notified))
 
         else:
             failed, notified = failure(failed, notified)
