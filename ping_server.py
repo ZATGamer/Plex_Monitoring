@@ -31,6 +31,7 @@ if __name__ == '__main__':
             failed = 0
             state.set('ping', 'failed', failed)
             write_file(state_file, state)
+            logging.warning('FAILED Count Reset to: {}'.format(failed))
         if notified != 0:
             notified = 0
             state.set('ping', 'notified', notified)
@@ -39,6 +40,7 @@ if __name__ == '__main__':
             subject = "Anthony-Server7 Responding - SUCCESS"
             body = "Anthony-Server7 has started responding to Ping requests."
             email_notification.send_notification(subject, body)
+            logging.warning('NOTIFIED Count Reset to: {}'.format(notified))
 
     else:
         failed += 1
