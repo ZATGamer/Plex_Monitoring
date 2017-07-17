@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import requests
 import ConfigParser
 import email_notification
