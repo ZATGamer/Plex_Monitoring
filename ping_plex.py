@@ -15,13 +15,12 @@ def failed(check, state, occurrences, notified):
     if state:
         # check the current known state in the DB
         state = False
-        occurrences = 1
         c.execute('''UPDATE monitor SET state=?, occurrences=? WHERE name=?''', (state, occurrences, check))
         conn.commit()
     elif not notified:
         if occurrences >= int(config.get('Plex_Info', 'f_occurrences')):
             email_notification.send_notification("Plex DOWN", "The Plex Server appears to be DOWN")
-            c.execute('''UPDATE monitor SET notified=? WHERE name=?''', (True, check))
+            c.execute('''UPDATE monitor SET occurrences=?, notified=? WHERE name=?''', (occurrences, True, check))
             conn.commit()
         else:
             c.execute('''UPDATE monitor SET occurrences=? WHERE name=?''', (occurrences, check))
@@ -72,7 +71,7 @@ def start_up():
 
 
 if __name__ == '__main__':
-    # logging.basicConfig(filename='/var/log/ping_plex.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
+    logging.basicConfig(filename='./ping_plex.log', level=logging.DEBUG, format='%(asctime)s %(message)s')
 
     config_file = 'config.ini'
     config = ConfigParser.RawConfigParser()
